@@ -1,0 +1,57 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form class="layui-form">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">影院选择</label>
+            <div class="layui-input-block">
+                <select name="cinema_id" id="cinema" onchange="submit" lay-filter="test">
+                    <option th:each="c:${cinemas}" th:text="${c.cinemaName}" th:value="${c.cinemaId}" th:selected="${map.get('cinemaId')} eq ${c.cinemaId}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">影厅选择</label>
+            <div class="layui-input-block">
+                <select name="interest" lay-filter="aihao">
+                    <option th:each="h:${halls}" th:text="${h.hallName}" th:value="${h.hallId}"></option>
+                </select>
+            </div>
+        </div>
+    </div>
+</form>
+<table class="layui-table" lay-even="" lay-skin="row">
+    <thread>
+        <th>放映厅</th>
+        <th>电影</th>
+        <th>放映时间</th>
+        <th>查看座位</th>
+        <th>删除</th>
+    </thread>
+    <tr th:each="t:${times}">
+        <td th:text="${t.hallInfo.hallName}"/>
+        <td th:text="${t.filmInfo.filmName}"/>
+        <td th:text="${t.filmTime}"/>
+        <td><button id="seat_show" th:value="${t.filmTimesId}" class="layui-btn">查看</button></td>
+        <td><button id="del" th:value="${t.filmTimesId}" class="layui-btn layui-btn-danger">删除</button></td>
+    </tr>
+</table>
+</html>
+<script type="text/javascript">
+    layui.use('form', function(){
+        var form = layui.form;
+        form.render();
+
+        form.on('select(test)', function(data){
+            var cinema_id = data.value;
+            console.log(data.value);
+                $.ajax({
+                    url: "/admin/times",
+                    async : false,
+                    data :{"cinema_id":cinema_id},
+                    success: function (html) {
+                        $("#content").html(html);
+                    }
+                })
+        });
+    });
+</script>

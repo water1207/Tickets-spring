@@ -1,0 +1,9 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:each="i:${#numbers.sequence(1,row)}" class="layui-col-md10" id="mine" style="margin-left: 10px">
+    <br>
+    <div style="background:url('/img/round.jpg');width: 28px;height: 28px;margin-right: 20px" class="layui-inline" ><center><p class="layui-font-18" style="color: white" th:text="${i}"></p></center></div>
+    <div th:each="j:${#numbers.sequence(1,col)}" class="layui-inline">
+        <img src="/img/seat_yes.png" class="ss" th:attr="x=${i},y=${j}">
+    </div>
+</div>
+</html>

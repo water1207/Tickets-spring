@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>确定订单</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <style>
+        th{
+            text-align: center !important;
+        }
+        tr{
+            text-align: center !important;
+        }
+    </style>
+</head>
+<body class="layui-bg-green">
+<ul class="layui-nav">
+    <li class="layui-nav-item">
+        <a href=""><span class="layui-badge-none"></span></a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/user/index">首页<span class="layui-badge-dot"></span></a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/user/film/time">影片<span class="layui-badge-none"></span></a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/user/cinema">影院<span class="layui-badge-none"></span></a>
+    </li>
+    <li class="layui-nav-item layui-col-md-offset8" lay-unselect="">
+        <a href="javascript:;"><img src="/img/mine.jpg" class="layui-nav-img">我</a>
+        <dl class="layui-nav-child">
+            <dd><a href="/user/order/mine">我的订单</a></dd>
+            <dd><a href="/user/profile">个人中心</a></dd>
+            <dd><a href="javascript:;">退出</a></dd>
+
+        </dl>
+    </li>
+</ul>
+<div class="layui-fluid">
+    <div class="layui-row ">
+        <div class="layui-col-md10 layui-col-lg-offset1">
+            <br>
+            <center>
+                <p class="layui-font-16 layui-col-md3">选择影片，场次</p>
+                <p class="layui-font-16 layui-col-md3">选座，填手机号</p>
+                <p class="layui-font-16 layui-col-md3">确认订单，支付</p>
+                <p class="layui-font-16 layui-col-md3" style="margin-bottom: 6px">支付成功，取票</p>
+            </center>
+            <div class="layui-col-md3 layui-bg-orange" style="height: 5px!important;"></div>
+            <div class="layui-col-md3 layui-bg-black" style="height: 5px!important;"></div>
+            <div class="layui-col-md3 layui-bg-orange" style="height: 5px!important;"></div>
+            <div class="layui-col-md3 layui-bg-black" style="height: 5px!important;"></div>
+        </div>
+        <div class="layui-col-md10 layui-col-lg-offset1 layui-bg-red">
+            <br><br>
+            <p class="layui-col-md8 layui-col-lg-offset1 layui-font-18">请您确认您的订单信息，并请在15分钟内完成付款，如超时系统将自动释放已选座位。</p>
+            <p class="layui-col-md3 layui-font-18">（剩余时间：</p>
+            <br><br><br>
+        </div>
+        <div class="layui-col-md10 layui-col-lg-offset1">
+            <p th:text="'订单号：'+${order.orderId}" class="layui-font-16 layui-font-cyan" style="margin: 5px"/>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>电影</th>
+                    <th>场次</th>
+                    <th>票数/座位</th>
+                    <th>金额小计</th>
+                    <th>接收电子码的电话号码</th>
+                </tr>
+                </thead>
+                <tbody style="text-align: center !important;">
+                <tr>
+                    <td>
+                        <img th:src="${times.filmInfo.filmBroadcastInfo.url}" class="layui-col-md5">
+                        <br><p th:text="${times.filmInfo.filmName}"/><br>
+                        <p th:text="'导演:'+${times.filmInfo.director}"/><br>
+                        <p th:text="'片长:'+${times.filmInfo.filmLength}+'分钟'"/><br>
+                    </td>
+                    <td><p th:text="${times.hallInfo.hallName}"/></td>
+<!--                    <td>{$times->hall->toCinema->cinema_name}<br><br>{$times->hall->hall_name}</td>-->
+                    <td>
+                        <div th:each="item:${items}">
+                        <button th:text="${item.posX+1}+'排'+${item.posY+1}+'座'" class="layui-btn layui-btn-primary layui-border-green"></button><br><br>
+                        </div>
+                    </td>
+                    <td th:text="'￥'+${order.total}"></td>
+                    <td th:text="'15268526658'"></td>
+                <tr>
+            </table>
+            <p th:text="'实付款：￥'+${order.total}" class="layui-font-20 layui-font-orange layui-col-lg-offset10"/>
+            <p th:text="'本单获积分：'+${order.total}" class="layui-font-16 layui-font-gray layui-col-lg-offset10"/>
+            <button class="layui-btn layui-btn-lg layui-btn-danger layui-col-lg-offset10" id="pay">确认支付</button>
+        </div>
+        <button class="layui-btn layui-btn-lg layui-btn-warm layui-col-lg-offset10" id="later">稍后支付</button>
+
+
+
+    </div>
+</div>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="/layui/layui.js"></script>
+<script type="text/javascript">
+    $('#pay').click(function () {
+        window.location.href = '/user/order/pay?order_id='+[[${order.orderId}]];
+    });
+    $('#later').click(function () {
+        window.location.href = '/user/order/mine';
+    });
+</script>
+
+</body>
+</html>

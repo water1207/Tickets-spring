@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的订单</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <style type="text/css">
+        table{
+            text-align: center;
+        }
+        th{
+            text-align: center!important;
+        }
+    </style>
+</head>
+<body class="layui-bg-green">
+<ul class="layui-nav">
+    <li class="layui-nav-item">
+        <a href=""><span class="layui-badge-none"></span></a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/user/index">首页<span class="layui-badge-dot"></span></a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/user/film/time">影片<span class="layui-badge-none"></span></a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/user/cinema">影院<span class="layui-badge-none"></span></a>
+    </li>
+    <li class="layui-nav-item layui-col-md-offset8" lay-unselect="">
+        <a href="javascript:;"><img src="/img/mine.jpg" class="layui-nav-img">我</a>
+        <dl class="layui-nav-child">
+            <dd><a href="/user/order/mine">我的订单</a></dd>
+            <dd><a href="/user/profile">个人中心</a></dd>
+            <dd><a href="javascript:;">退出</a></dd>
+
+        </dl>
+    </li>
+</ul>
+<div class="layui-fluid layui-bg-green">
+    <div class="layui-row">
+        <div class="layui-col-md10 layui-col-lg-offset1">
+            <br>
+            <p class="layui-font-16">我的订单</p>
+            <hr>
+            <table class="layui-table">
+                <thread>
+                    <th>序号</th>
+                    <th>电影</th>
+                    <th>场次</th>
+                    <th>票数/座位</th>
+                    <th>合计</th>
+                    <th>状态</th>
+                    <th>QR</th>
+                </thread>
+                <tr th:each="o,i:${orders}">
+                    <td th:text="${i.index+1}" style="text-align: center"></td>
+                    <td th:text="${o.filmTimes.filmInfo.filmName}" >{$o->time->film->film_name}</td>
+                    <td th:text="${o.filmTimes.hallInfo.cinemaInfo.cinemaName}+' '+${o.filmTimes.hallInfo.hallName}"></td>
+                    <td>
+                        <div th:each="item:${o.itemInfo}" class="layui-inline">
+                        <button th:text="${item.posX}+'排'+${item.posY}+'座'" class="layui-btn layui-btn-primary layui-border-red"></button>
+                        </div>
+                    </td>
+                    <td th:text="'￥'+${o.total}"></td>
+                    <td th:if="${o.orderState eq 0}">待支付</td>
+                    <td th:if="${o.orderState eq 1}">未使用</td>
+                    <td th:if="${o.orderState eq 2}">已使用</td>
+
+                    <td th:if="${o.orderState eq 1}"><img src="https://api.pwmqr.com/qrcode/create/?url=http://127.0.0.1:8000/user/my_order+{$o->order_id}"/></td>
+                    <td th:if="${o.orderState eq 0}"><a class="pay" th:attr="oid=${o.orderId}" href="javascript:;">去支付</a></td>
+                    <td th:if="${o.orderState eq 2}"><p>已使用</p></td>
+                </tr>
+
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="/layui/layui.js"></script>
+<script type="text/javascript">
+    $('.pay').click(function () {
+        alert("支付成功");
+        var orderId = $(this).attr('oid');
+        window.location.href = '/user/order/pay?order_id='+orderId;
+    });
+</script>
+</body>
+</html>

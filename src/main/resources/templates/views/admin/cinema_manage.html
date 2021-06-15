@@ -1,0 +1,24 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<p th:class="layui-font-18">影院管理</p>
+<table class="layui-table" lay-even="" lay-skin="row">
+    <thread>
+        <th>序号</th>
+        <th>UserId</th>
+        <th>用户名</th>
+        <th>密码</th>
+        <th>编辑</th>
+        <th>删除</th>
+    </thread>
+    <tr th:each="u,i:${users}">
+        <td th:text="${i.index+1}" style="text-align: center"/>
+        <td th:text="${u.userId}"/>
+        <td th:text="${u.userName}"/>
+        <td th:text="${u.userPwd}"/>
+        <td><button id="edit" th:value="${u.userId}" class="layui-btn">编辑</button></td>
+        <td><button id="del" th:value="${u.userId}" class="layui-btn layui-btn-danger">删除</button></td>
+    </tr>
+</table>
+</html>
+<script type="text/javascript">
+
+</script>

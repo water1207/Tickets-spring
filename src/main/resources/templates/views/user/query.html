@@ -1,0 +1,30 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<br>
+<div class="layui-col-md2 layui-col-lg-offset1">
+    <p class="layui-font-18" th:each="c:${cinemaList}" th:if="${c.cinemaId} eq ${cinemaId}" th:text="${c.cinemaName}"></p>
+</div>
+<div class="layui-col-md10 layui-col-lg-offset1">
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th>放映时间</th>
+            <th>语言版本</th>
+            <th>放映厅</th>
+            <th>座位情况</th>
+            <th>票价</th>
+            <th>选座购票</th>
+        </tr>
+        </thead>
+        <tbody style="text-align: center !important;">
+        <tr th:each="t:${times}">
+            <td th:text="${t.filmTime}"></td>
+            <td th:text="${t.filmInfo.makeFilmArea}"></td>
+            <td th:text="${t.hallInfo.hallName}"></td>
+            <td>充裕</td>
+            <td th:text="'￥'+${t.filmPrice}"></td>
+            <td class="buy"><button class="layui-btn layui-btn-danger" th:value="${t.filmTimesId}">选座购票</button> </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</html>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.hziee.tpp.mapper.CinemaInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.hziee.tpp.model.CinemaInfo">
+    <id column="cinema_id" jdbcType="INTEGER" property="cinemaId" />
+    <result column="cinema_name" jdbcType="VARCHAR" property="cinemaName" />
+    <result column="cinema_address" jdbcType="VARCHAR" property="cinemaAddress" />
+    <result column="grade" jdbcType="REAL" property="grade" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="cinema_pic" jdbcType="VARCHAR" property="cinemaPic" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cinema_info
+    where cinema_id = #{cinemaId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.hziee.tpp.model.CinemaInfo">
+    insert into cinema_info (cinema_id, cinema_name, cinema_address, 
+      grade, telephone, cinema_pic, 
+      area)
+    values (#{cinemaId,jdbcType=INTEGER}, #{cinemaName,jdbcType=VARCHAR}, #{cinemaAddress,jdbcType=VARCHAR}, 
+      #{grade,jdbcType=REAL}, #{telephone,jdbcType=VARCHAR}, #{cinemaPic,jdbcType=VARCHAR}, 
+      #{area,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.hziee.tpp.model.CinemaInfo">
+    update cinema_info
+    set cinema_name = #{cinemaName,jdbcType=VARCHAR},
+      cinema_address = #{cinemaAddress,jdbcType=VARCHAR},
+      grade = #{grade,jdbcType=REAL},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      cinema_pic = #{cinemaPic,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR}
+    where cinema_id = #{cinemaId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select cinema_id, cinema_name, cinema_address, grade, telephone, cinema_pic, area
+    from cinema_info
+    where cinema_id = #{cinemaId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select cinema_id, cinema_name, cinema_address, grade, telephone, cinema_pic, area
+    from cinema_info
+  </select>
+  <select id="selectByArea" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from cinema_info where area = #{area}
+  </select>
+  <select id="selectAreas" resultType="java.lang.String">
+    select DISTINCT area from cinema_info
+  </select>
+</mapper>

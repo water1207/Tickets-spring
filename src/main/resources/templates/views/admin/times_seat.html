@@ -1,0 +1,18 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<p class="layui-font-16">查看座位</p>
+<hr>
+    <div class="layui-inline layui-col-md8" style="height: 600px">
+        <img src="/img/screen.png" class="layui-col-md12">
+        <center><p class="layui-font-16" th:text="${times.hallInfo.hallName}">
+            {$times->hall->toCinema->cinema_name} -- {$times->hall->hall_name}</p></center>
+        <div th:each="s,i:${seats}" class="layui-col-md10" id="mine" style="margin-left: 10px">
+            <br>
+            <div style="background:url('/img/round.jpg');width: 28px;height: 28px;margin-right: 20px" class="layui-inline" ><center><p class="layui-font-18" style="color: white" th:text="${i.index+1}"></p></center></div>
+            <div th:each="ss,j:${s}" class="layui-inline">
+                <img src="/img/seat_yes.png" class="ss" th:attr="x=${i.index},y=${j.index}" th:if="${ss} eq 'a'">
+                <img src="/img/seat_no.png" th:if="${ss} eq 'b'">
+                <div style="width: 32px;" class="layui-inline" th:if="${ss} eq '_'"></div>
+            </div>
+        </div>
+    </div>
+</html>

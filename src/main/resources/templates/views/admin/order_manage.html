@@ -1,0 +1,84 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form class="layui-form">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">影院选择</label>
+            <div class="layui-input-block">
+                <select name="cinema_id" id="cinema" onchange="submit" lay-filter="test">
+                    <option th:each="c:${cinemas}" th:text="${c.cinemaName}" th:value="${c.cinemaId}" th:selected="${map.get('cinemaId')} eq ${c.cinemaId}"></option>
+                </select>
+            </div>
+        </div>
+    </div>
+</form>
+<table class="layui-table">
+    <thread>
+        <th>序号</th>
+        <th>电影</th>
+        <th>场次</th>
+        <th>票数/座位</th>
+        <th>合计</th>
+        <th>状态</th>
+        <th>核销</th>
+    </thread>
+    <tr th:each="o,i:${orders}">
+        <td th:text="${i.index+1}" style="text-align: center"></td>
+        <td th:text="${o.filmTimes.filmInfo.filmName}"></td>
+        <td th:text="${o.filmTimes.hallInfo.cinemaInfo.cinemaName}+' '+${o.filmTimes.hallInfo.hallName}"></td>
+        <td>
+            <div th:each="item:${o.itemInfo}" class="layui-inline">
+                <button th:text="${item.posX}+'排'+${item.posY}+'座'" class="layui-btn layui-btn-primary layui-border-red"></button>
+            </div>
+        </td>
+        <td th:text="'￥'+${o.total}"></td>
+        <td th:if="${o.orderState eq 0}">待支付</td>
+        <td th:if="${o.orderState eq 1}">未使用</td>
+        <td th:if="${o.orderState eq 2}">已使用</td>
+        <input type="text" th:value="${o.phone}" id="phone" hidden>
+        <td th:if="${o.orderState eq 1}"><button id="off" class="layui-btn layui-btn-danger" th:value="${o.orderId}">核销</button></td>
+        <td th:if="${o.orderState eq 0}"><a href="javascript:;" id="ding" th:class="layui-font-green">提醒</a></td>
+        <td th:if="${o.orderState eq 2}"><button class="layui-btn layui-btn-disabled" th:value="${o.orderId}">核销</button></td>
+    </tr>
+
+</table>
+</html>
+<script type="text/javascript">
+    layui.use('form', function(){
+        var form = layui.form;
+        form.render();
+        form.on('select(test)', function(data){
+            var cinema_id = data.value;
+            // console.log(data.value);
+            //     $.ajax({
+            //         url: "/admin/order",
+            //         async : false,
+            //         data :{"cinema_id":cinema_id},
+            //         success: function (html) {
+            //             $("#content").html(html);
+            //         }
+            //     })
+        });
+    });
+    $('#off').click(function (e) {
+        var orderId =  e.target.value;
+        $.ajax({
+            url: "/admin/order/off",
+            async : false,
+            data :{"order_id":orderId},
+            success: function (html) {
+                $("#content").html(html);
+            }
+        })
+    });
+    $('#ding').click(function (e) {
+        var phone =  $('#phone').val();
+        $.ajax({
+            url: "/admin/order/ding",
+            async : false,
+            data :{"phone":phone},
+            success: function (html) {
+                alert("短信提醒成功")
+            }
+        })
+    });
+</script>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.hziee.tpp.mapper.FilmInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.hziee.tpp.model.FilmInfo">
+    <id column="film_id" jdbcType="INTEGER" property="filmId" />
+    <result column="film_name" jdbcType="VARCHAR" property="filmName" />
+    <result column="play_time" jdbcType="DATE" property="playTime" />
+    <result column="director" jdbcType="VARCHAR" property="director" />
+    <result column="actor" jdbcType="VARCHAR" property="actor" />
+    <result column="film_type" jdbcType="VARCHAR" property="filmType" />
+    <result column="make_film_area" jdbcType="VARCHAR" property="makeFilmArea" />
+    <result column="make_film_man" jdbcType="VARCHAR" property="makeFilmMan" />
+    <result column="film_length" jdbcType="INTEGER" property="filmLength" />
+    <result column="film_introduce" jdbcType="VARCHAR" property="filmIntroduce" />
+    <result column="film_play_status" jdbcType="INTEGER" property="filmPlayStatus" />
+    <result column="film_grace" jdbcType="REAL" property="filmGrace" />
+    <association property="filmBroadcastInfo"
+                 select="cn.edu.hziee.tpp.mapper.FilmBroadcastInfoMapper.selectByPrimaryKey"
+                 column="film_id">
+    </association>
+
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from film_info
+    where film_id = #{filmId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.hziee.tpp.model.FilmInfo">
+    insert into film_info (film_id, film_name, play_time, 
+      director, actor, film_type, 
+      make_film_area, make_film_man, film_length, 
+      film_introduce, film_play_status, film_grace
+      )
+    values (#{filmId,jdbcType=INTEGER}, #{filmName,jdbcType=VARCHAR}, #{playTime,jdbcType=DATE}, 
+      #{director,jdbcType=VARCHAR}, #{actor,jdbcType=VARCHAR}, #{filmType,jdbcType=VARCHAR}, 
+      #{makeFilmArea,jdbcType=VARCHAR}, #{makeFilmMan,jdbcType=VARCHAR}, #{filmLength,jdbcType=INTEGER}, 
+      #{filmIntroduce,jdbcType=VARCHAR}, #{filmPlayStatus,jdbcType=INTEGER}, #{filmGrace,jdbcType=REAL}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.hziee.tpp.model.FilmInfo">
+    update film_info
+    set film_name = #{filmName,jdbcType=VARCHAR},
+      play_time = #{playTime,jdbcType=DATE},
+      director = #{director,jdbcType=VARCHAR},
+      actor = #{actor,jdbcType=VARCHAR},
+      film_type = #{filmType,jdbcType=VARCHAR},
+      make_film_area = #{makeFilmArea,jdbcType=VARCHAR},
+      make_film_man = #{makeFilmMan,jdbcType=VARCHAR},
+      film_length = #{filmLength,jdbcType=INTEGER},
+      film_introduce = #{filmIntroduce,jdbcType=VARCHAR},
+      film_play_status = #{filmPlayStatus,jdbcType=INTEGER},
+      film_grace = #{filmGrace,jdbcType=REAL}
+    where film_id = #{filmId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select film_id, film_name, play_time, director, actor, film_type, make_film_area, 
+    make_film_man, film_length, film_introduce, film_play_status, film_grace
+    from film_info
+    where film_id = #{filmId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select film_id, film_name, play_time, director, actor, film_type, make_film_area, 
+    make_film_man, film_length, film_introduce, film_play_status, film_grace
+    from film_info
+  </select>
+  <select id="selectFilmBroadcastInfo" resultType="cn.edu.hziee.tpp.model.FilmBroadcastInfo">
+    select * from film_broadcast_info
+  </select>
+</mapper>

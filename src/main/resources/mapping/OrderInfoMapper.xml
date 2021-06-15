@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.hziee.tpp.mapper.OrderInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.hziee.tpp.model.OrderInfo">
+    <id column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="total" jdbcType="VARCHAR" property="total" />
+    <result column="film_times_id" jdbcType="INTEGER" property="filmTimesId" />
+    <result column="order_state" jdbcType="INTEGER" property="orderState" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+
+    <association property="filmTimes"
+                 select="cn.edu.hziee.tpp.mapper.FilmTimesMapper.selectByPrimaryKey"
+                 column="film_times_id">
+    </association>
+    <collection property="itemInfo"
+                javaType="list"
+                ofType="cn.edu.hziee.tpp.model.OrderItemInfo"
+                select="cn.edu.hziee.tpp.mapper.OrderItemInfoMapper.selectByOrder"
+                column="order_id">
+    </collection>
+
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from order_info
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.hziee.tpp.model.OrderInfo" useGeneratedKeys="true" keyProperty="orderId">
+    insert into order_info (order_id, user_id, total, 
+      film_times_id, order_state, phone
+      )
+    values (#{orderId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{total,jdbcType=VARCHAR}, 
+      #{filmTimesId,jdbcType=INTEGER}, #{orderState,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.hziee.tpp.model.OrderInfo">
+    update order_info
+    set user_id = #{userId,jdbcType=INTEGER},
+      total = #{total,jdbcType=VARCHAR},
+      film_times_id = #{filmTimesId,jdbcType=INTEGER},
+      order_state = #{orderState,jdbcType=INTEGER},
+      phone = #{phone,jdbcType=VARCHAR}
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select order_id, user_id, total, film_times_id, order_state, phone
+    from order_info
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByTimesId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select order_id, user_id, total, film_times_id, order_state, phone
+    from order_info
+    where film_times_id = #{timesId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByTimesIdLocked" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select order_id, user_id, total, film_times_id, order_state, phone
+    from order_info
+    where film_times_id = #{timesId,jdbcType=INTEGER} for update
+  </select>
+
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select order_id, user_id, total, film_times_id, order_state, phone
+    from order_info
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select order_id, user_id, total, film_times_id, order_state, phone
+    from order_info
+  </select>
+</mapper>

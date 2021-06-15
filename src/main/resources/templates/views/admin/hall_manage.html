@@ -1,0 +1,54 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>影厅管理</title>
+</head>
+<body>
+<form class="layui-form">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">影院选择</label>
+            <div class="layui-input-block">
+                <select name="cinema_id" id="cinema" lay-filter="test">
+                    <option th:each="c:${cinemas}" th:text="${c.cinemaName}" th:value="${c.cinemaId}" th:selected="${cinemaId eq c.cinemaId}"></option>
+                </select>
+            </div>
+        </div>
+    </div>
+</form>
+<table class="layui-table" lay-even="" lay-skin="row">
+    <thread>
+        <th>序号</th>
+        <th>影厅号</th>
+        <th>影厅名称</th>
+        <th>名称编辑</th>
+        <th>删除</th>
+    </thread>
+    <tr th:each="h,i:${halls}">
+        <td th:text="${i.index+1}" style="text-align: center"/>
+        <td th:text="${h.hallId}"/>
+        <td th:text="${h.hallName}"/>
+        <td><button id="edit1" th:value="${h.hallId}" class="layui-btn">名称编辑</button></td>
+        <td><button id="hall_del" th:value="${h.hallId}" class="layui-btn layui-btn-danger">删除</button></td>
+    </tr>
+</table>
+</body>
+</html>
+<script type="text/javascript">
+    layui.use('form', function(){
+        var form = layui.form;
+        form.render();
+        form.on('select(test)', function(data){
+            var cinema_id = data.value;
+            console.log(data.value);
+            $.ajax({
+                url: "/admin/hall",
+                async : false,
+                data :{"cinema_id":cinema_id},
+                success: function (html) {
+                    $("#content").html(html);
+                }
+            })
+        });
+    });
+</script>

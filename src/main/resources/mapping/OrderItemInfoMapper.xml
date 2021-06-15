@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.hziee.tpp.mapper.OrderItemInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.hziee.tpp.model.OrderItemInfo">
+    <id column="order_item_id" jdbcType="INTEGER" property="orderItemId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="qr_code" jdbcType="VARCHAR" property="qrCode" />
+    <result column="pos_x" jdbcType="INTEGER" property="posX" />
+    <result column="pos_y" jdbcType="INTEGER" property="posY" />
+    <result column="price" jdbcType="REAL" property="price" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from order_item_info
+    where order_item_id = #{orderItemId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.hziee.tpp.model.OrderItemInfo">
+    insert into order_item_info (order_item_id, order_id, qr_code, 
+      pos_x, pos_y, price)
+    values (#{orderItemId,jdbcType=INTEGER}, #{orderId,jdbcType=VARCHAR}, #{qrCode,jdbcType=VARCHAR}, 
+      #{posX,jdbcType=INTEGER}, #{posY,jdbcType=INTEGER}, #{price,jdbcType=REAL})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.hziee.tpp.model.OrderItemInfo">
+    update order_item_info
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      qr_code = #{qrCode,jdbcType=VARCHAR},
+      pos_x = #{posX,jdbcType=INTEGER},
+      pos_y = #{posY,jdbcType=INTEGER},
+      price = #{price,jdbcType=REAL}
+    where order_item_id = #{orderItemId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select order_item_id, order_id, qr_code, pos_x, pos_y, price
+    from order_item_info
+    where order_item_id = #{orderItemId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select order_item_id, order_id, qr_code, pos_x, pos_y, price
+    from order_item_info
+  </select>
+  <select id="selectByOrder" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select * from order_item_info where order_id=#{order_id}
+  </select>
+</mapper>

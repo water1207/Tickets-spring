@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>影院</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <style type="text/css">
+        th{
+            text-align: center!important;
+        }
+        #t2 > td{
+            text-align: center!important;
+        }
+    </style>
+</head>
+<body>
+<ul class="layui-nav">
+    <li class="layui-nav-item">
+        <a href=""><span class="layui-badge-none"></span></a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/user/index">首页<span class="layui-badge-dot"></span></a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/user/film/time">影片<span class="layui-badge-none"></span></a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/user/cinema">影院<span class="layui-badge-none"></span></a>
+    </li>
+    <li class="layui-nav-item layui-col-md-offset8" lay-unselect="">
+        <a href="javascript:;"><img src="/img/mine.jpg" class="layui-nav-img">我</a>
+        <dl class="layui-nav-child">
+            <dd><a href="/user/order/mine">我的订单</a></dd>
+            <dd><a href="/user/profile">个人中心</a></dd>
+            <dd><a href="javascript:;">退出</a></dd>
+
+        </dl>
+    </li>
+</ul>
+<div class="layui-container">
+    <div class="layui-row layui-bg-black">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <td>选择区域</td>
+                <td>
+                    <div th:each="area:${areas}" class="layui-inline">
+                    <button class="layui-btn layui-btn-primary layui-border-green" th:text="${area}"></button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>搜索</td>
+                <td>
+                    <div class="layui-row">
+                    <input type="text" class="layui-input" style="width: 200px;display: inline"/>
+                    <button class="layui-btn">搜索</button>
+                    </div>
+                </td>
+            </tr>
+            </thead>
+        </table>
+        <table class="layui-table">
+            <thead>
+                <th>影院</th>
+                <th>名称</th>
+                <th>详细信息</th>
+                <th>评分</th>
+                <th>选座</th>
+            </thead>
+            <tr id="t2" th:each="c:${cinemas}">
+                <td><img th:src="${c.cinemaPic}" /></td>
+                <td th:text="${c.cinemaName}"></td>
+                <td th:text="${c.cinemaAddress}"></td>
+                <td th:text="${c.grade}"><i class="layui-icon layui-icon-rate-solid" style="color: #1E9FFF;"></i></td>
+                <td><button class="layui-btn layui-btn-danger">选座</button></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="/layui/layui.js"></script>
+</body>
+</html>

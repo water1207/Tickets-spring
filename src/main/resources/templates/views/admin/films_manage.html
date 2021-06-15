@@ -1,0 +1,25 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<table class="layui-table" lay-even="" lay-skin="row">
+    <thread>
+        <th>海报</th>
+        <th>电影名称</th>
+        <th>类型</th>
+        <th>片长</th>
+        <th>简介</th>
+        <th>删除</th>
+    </thread>
+    <tr th:each="f:${films}">
+        <td><img th:src="${f.filmBroadcastInfo.url}"></td>
+        <td th:text="${f.filmName}"/>
+        <td th:text="${f.filmType}"/>
+        <td th:text="${f.filmLength}"/>
+        <td  style="width: 300px;!important;" >
+            <p th:text="${f.filmIntroduce}"></p>
+        </td>
+        <td><button id="del" th:value="${f.filmId}" class="layui-btn layui-btn-danger">编辑</button></td>
+    </tr>
+</table>
+</html>
+<script type="text/javascript">
+
+</script>

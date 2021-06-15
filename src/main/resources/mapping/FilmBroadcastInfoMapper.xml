@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.hziee.tpp.mapper.FilmBroadcastInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.hziee.tpp.model.FilmBroadcastInfo">
+    <id column="film_broadcast_id" jdbcType="INTEGER" property="filmBroadcastId" />
+    <result column="film_id" jdbcType="INTEGER" property="filmId" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="is_main_page" jdbcType="INTEGER" property="isMainPage" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from film_broadcast_info
+    where film_broadcast_id = #{filmBroadcastId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.hziee.tpp.model.FilmBroadcastInfo">
+    insert into film_broadcast_info (film_broadcast_id, film_id, url, 
+      is_main_page, `type`)
+    values (#{filmBroadcastId,jdbcType=INTEGER}, #{filmId,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, 
+      #{isMainPage,jdbcType=INTEGER}, #{type,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.hziee.tpp.model.FilmBroadcastInfo">
+    update film_broadcast_info
+    set film_id = #{filmId,jdbcType=INTEGER},
+      url = #{url,jdbcType=VARCHAR},
+      is_main_page = #{isMainPage,jdbcType=INTEGER},
+      `type` = #{type,jdbcType=INTEGER}
+    where film_broadcast_id = #{filmBroadcastId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select film_broadcast_id, film_id, url, is_main_page, `type`
+    from film_broadcast_info
+    where film_broadcast_id = #{filmBroadcastId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select film_broadcast_id, film_id, url, is_main_page, `type`
+    from film_broadcast_info
+  </select>
+</mapper>

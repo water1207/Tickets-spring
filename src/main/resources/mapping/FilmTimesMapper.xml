@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.hziee.tpp.mapper.FilmTimesMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.hziee.tpp.model.FilmTimes">
+    <id column="film_times_id" jdbcType="INTEGER" property="filmTimesId" />
+    <result column="film_id" jdbcType="INTEGER" property="filmId" />
+    <result column="hall_id" jdbcType="INTEGER" property="hallId" />
+    <result column="film_date" jdbcType="VARCHAR" property="filmDate" />
+    <result column="film_time" jdbcType="VARCHAR" property="filmTime" />
+    <result column="film_price" jdbcType="REAL" property="filmPrice" />
+    <result column="film_discount" jdbcType="REAL" property="filmDiscount" />
+    <result column="seat_info" jdbcType="VARCHAR" property="seatInfo" />
+
+    <association property="filmInfo"
+                 select="cn.edu.hziee.tpp.mapper.FilmInfoMapper.selectByPrimaryKey"
+                 column="film_id">
+    </association>
+
+    <association property="hallInfo"
+                 select="cn.edu.hziee.tpp.mapper.HallInfoMapper.selectByPrimaryKey"
+                 column="hall_id">
+    </association>
+
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from film_times
+    where film_times_id = #{filmTimesId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.hziee.tpp.model.FilmTimes">
+    insert into film_times (film_times_id, film_id, hall_id, 
+      film_date, film_time, film_price, 
+      film_discount, seat_info)
+    values (#{filmTimesId,jdbcType=INTEGER}, #{filmId,jdbcType=INTEGER}, #{hallId,jdbcType=INTEGER}, 
+      #{filmDate,jdbcType=VARCHAR}, #{filmTime,jdbcType=VARCHAR}, #{filmPrice,jdbcType=REAL}, 
+      #{filmDiscount,jdbcType=REAL}, #{seatInfo,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.hziee.tpp.model.FilmTimes">
+    update film_times
+    set film_id = #{filmId,jdbcType=INTEGER},
+      hall_id = #{hallId,jdbcType=INTEGER},
+      film_date = #{filmDate,jdbcType=VARCHAR},
+      film_time = #{filmTime,jdbcType=VARCHAR},
+      film_price = #{filmPrice,jdbcType=REAL},
+      film_discount = #{filmDiscount,jdbcType=REAL},
+      seat_info = #{seatInfo,jdbcType=VARCHAR}
+    where film_times_id = #{filmTimesId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select film_times_id, film_id, hall_id, film_date, film_time, film_price, film_discount, 
+    seat_info
+    from film_times
+    where film_times_id = #{filmTimesId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryKeyLocked" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select film_times_id, film_id, hall_id, film_date, film_time, film_price, film_discount,
+    seat_info
+    from film_times
+    where film_times_id = #{filmTimesId,jdbcType=INTEGER} for update
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select film_times_id, film_id, hall_id, film_date, film_time, film_price, film_discount, 
+    seat_info
+    from film_times
+  </select>
+<!--  <select id="queryTimes" resultMap="BaseResultMap">-->
+<!--    SELECT * FROM `film_times` WHERE `hall_id` IN (SELECT `hall_id` FROM `hall_info` WHERE `cinema_id` = #{cinemaId}) AND `film_id` = #{filmId} AND `film_date` = #{filmDate}-->
+<!--  </select>-->
+  <select id="queryTimes" resultMap="BaseResultMap">
+    SELECT * FROM `film_times` WHERE `hall_id` IN (SELECT `hall_id` FROM `hall_info` WHERE `cinema_id` = #{cinemaId})
+      <if test="filmId neq null">
+        AND `film_id` = #{filmId}
+      </if>
+      <if test="filmDate neq null">
+        AND `film_date` = #{filmDate}
+      </if>
+  </select>
+</mapper>

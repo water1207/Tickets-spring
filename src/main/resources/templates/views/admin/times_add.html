@@ -1,0 +1,169 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form class="layui-form">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">选择影片</label>
+            <div class="layui-input-block">
+                <select name="film_id" id="film"  lay-filter="film">
+                    <option th:each="f:${films}" th:text="${f.filmName}" th:value="${f.filmId}" th:selected="${map.get('filmId')} eq ${f.filmId}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">影院选择</label>
+            <div class="layui-input-block">
+                <select name="cinema_id" id="cinema" lay-filter="cinema">
+                    <option th:each="c:${cinemas}" th:text="${c.cinemaName}" th:value="${c.cinemaId}" th:selected="${map.get('cinemaId')} eq ${c.cinemaId}"></option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">日期选择</label>
+            <div class="layui-input-block">
+                <select name="date" id="date" lay-filter="date">
+                    <option th:each="d:${dateList}" th:value="${d}" th:text="${d}" th:selected="${map.get('date')} eq ${d}"></option>
+<!--                    <option value="05-29" th:selected="${map.get('date')} eq '05-29'">05-29</option>-->
+<!--                    <option value="05-30" th:selected="${map.get('date')} eq '05-30'">05-30</option>-->
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">放映时间</label>
+            <div class="layui-input-block">
+                <select name="time" id="time" lay-filter="time">
+                    <option value="7" th:selected="${map.get('time')} eq '7'">7:00-9:00</option>
+                    <option value="9" th:selected="${map.get('time')} eq '9'">9:00-11:00</option>
+                    <option value="13" th:selected="${map.get('time')} eq '13'">13:00-15:00</option>
+                    <option value="15" th:selected="${map.get('time')} eq '15'">15:00-17:00</option>
+                    <option value="19" th:selected="${map.get('time')} eq '19'">19:00-21:00</option>
+                    <option value="21" th:selected="${map.get('time')} eq '21'">21:00-23:00</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">影厅选择</label>
+            <div class="layui-input-block">
+                <select name="hall_id" id="hall" lay-filter="hall">
+                    <option th:each="h:${halls}" th:text="${h.hallName}" th:value="${h.hallId}"></option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <table class="layui-table" lay-even="" lay-skin="row" id="child_content">
+        <thread>
+            <th>海报</th>
+            <th>电影名称</th>
+            <th>类型</th>
+            <th>片长</th>
+            <th>简介</th>
+        </thread>
+        <tr th:each="f:${films}" th:if="${map.get('filmId') eq f.filmId}">
+            <td><img th:src="${f.filmBroadcastInfo.url}"></td>
+            <td th:text="${f.filmName}"/>
+            <td th:text="${f.filmType}"/>
+            <td th:text="${f.filmLength}"/>
+            <td  style="width: 300px;!important;" >
+                <p th:text="${f.filmIntroduce}"></p>
+            </td>
+        </tr>
+    </table>
+    <div class="layui-col-md2 layui-col-md-offset9" style="margin-bottom: 20px">
+        <label class="layui-form-label">设定售价</label>
+        <div class="layui-input-block">
+            <input type="text" name="price" class="layui-input" required>
+        </div>
+    </div>
+    <button class="layui-btn layui-col-md-offset10" lay-submit lay-filter="form">立即提交</button>
+</form>
+</html>
+<script type="text/javascript">
+    layui.use('form', function(){
+        var form = layui.form;
+        form.render();
+
+        form.on('select(film)', function(data){
+            var film_id = data.value;
+            var time = $('#time').val();
+            var date = $('#date').val();
+            var cinema_id = $('#cinema').val();
+            console.log(data.value);
+                $.ajax({
+                    url: "/admin/times/to_add",
+                    async : false,
+                    data :{"cinema_id":cinema_id,
+                        "film_id":film_id,
+                        "date":date,
+                        "time":time},
+                    success: function (html) {
+                        $("#content").html(html);
+                    }
+                })
+        });
+        form.on('select(cinema)', function(data){
+            var cinema_id = data.value;
+            var film_id = $('#film').val();
+            var time = $('#time').val();
+            var date = $('#date').val();
+            $.ajax({
+                url: "/admin/times/to_add",
+                async : false,
+                data :{"cinema_id":cinema_id,
+                    "film_id":film_id,
+                    "date":date,
+                    "time":time},
+                success: function (html) {
+                    $("#content").html(html);
+                }
+            })
+        });
+        form.on('select(date)', function(data){
+            var cinema_id = data.value;
+            var film_id = $('#film').val();
+            var time = $('#time').val();
+            var date = $('#date').val();
+            $.ajax({
+                url: "/admin/times/to_add",
+                async : false,
+                data :{"cinema_id":cinema_id,
+                    "film_id":film_id,
+                    "date":date,
+                    "time":time},
+                success: function (html) {
+                    $("#content").html(html);
+                }
+            })
+        });
+        form.on('select(time)', function(data){
+            var time = data.value;
+            var date = $('#date').val();
+            var cinema_id = $('#cinema').val();
+            var film_id = $('#film').val();
+            $.ajax({
+                url: "/admin/times/to_add",
+                async : false,
+                data :{"cinema_id":cinema_id,
+                    "film_id":film_id,
+                    "date":date,
+                    "time":time},
+                success: function (html) {
+                    $("#content").html(html);
+                }
+            })
+        });
+        form.on('submit(form)', function (data) {
+            $.ajax({
+                url: "/admin/times/add",
+                async : false,
+                data :data.field,
+                success: function (html) {
+                    $("#content").html(html);
+                }
+            })
+            return false;
+        });
+    });
+</script>
